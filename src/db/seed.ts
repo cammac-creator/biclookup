@@ -8,6 +8,7 @@ import { createReadStream } from 'node:fs';
 import { Readable } from 'node:stream';
 import { createUnzip } from 'node:zlib';
 import { execSync } from 'node:child_process';
+import { getCountryName } from '../lib/countries.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.DB_PATH ?? resolve(__dirname, '../../data/bic.sqlite');
@@ -113,7 +114,7 @@ async function fetchEntities(leis: string[]): Promise<Map<string, EntityInfo>> {
           lei: a.lei,
           name: a.entity.legalName.name,
           country: a.entity.legalAddress.country,
-          countryName: null,
+          countryName: getCountryName(a.entity.legalAddress.country),
           city: a.entity.legalAddress.city ?? null,
         });
       }
@@ -194,7 +195,7 @@ async function seed() {
       bic11,
       entity?.name ?? null,
       countryCode,
-      entity?.countryName ?? null,
+      entity?.countryName ?? getCountryName(countryCode),
       entity?.city ?? null,
       branchCode,
       null, // branch_info
