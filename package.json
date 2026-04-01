@@ -1,0 +1,28 @@
+{
+  "name": "biclookup-api",
+  "version": "1.0.0",
+  "description": "BIC/SWIFT Lookup API with LEI enrichment and x402 micropayments",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:enrich": "tsx scripts/enrich-lei.ts",
+    "mcp": "tsx src/mcp/server.ts",
+    "test": "tsx src/lib/bic.test.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@x402/hono": "latest",
+    "better-sqlite3": "^11.0.0",
+    "hono": "^4.7.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.17.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
