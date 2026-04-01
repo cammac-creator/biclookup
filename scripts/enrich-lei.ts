@@ -17,10 +17,10 @@ const db = new Database(DB_PATH);
 // Find rows that have a country_code but no country_name
 const rows = db
   .prepare(
-    `SELECT rowid, country_code FROM bic_entries
+    `SELECT id, country_code FROM bic_entries
      WHERE country_name IS NULL AND country_code IS NOT NULL`
   )
-  .all() as { rowid: number; country_code: string }[];
+  .all() as { id: number; country_code: string }[];
 
 console.log(`Found ${rows.length} rows with missing country_name.`);
 
@@ -31,7 +31,7 @@ if (rows.length === 0) {
 }
 
 const update = db.prepare(
-  `UPDATE bic_entries SET country_name = ? WHERE rowid = ?`
+  `UPDATE bic_entries SET country_name = ? WHERE id = ?`
 );
 
 let updated = 0;
@@ -42,8 +42,8 @@ const runTransaction = db.transaction(() => {
   for (const row of rows) {
     const name = getCountryName(row.country_code);
     if (name) {
-      update.run(name, row.rowid);
-      updated++;
+      const result = update.run(name, row.id);
+      updated += result.changes;
     } else {
       unmapped++;
       unmappedCodes.add(row.country_code);
