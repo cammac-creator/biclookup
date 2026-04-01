@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "start": "node dist/index.js",
     "db:seed": "tsx src/db/seed.ts",
     "db:enrich": "tsx scripts/enrich-lei.ts",
     "mcp": "tsx src/mcp/server.ts",
